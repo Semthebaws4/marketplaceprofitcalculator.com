@@ -1,0 +1,273 @@
+:root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-color: #4CAF50;
+    --border-color: #404040;
+    --input-bg: #333333;
+    --hover-color: #3d3d3d;
+    --success-glow: #4CAF50;
+    --warning-glow: #FFA500;
+    --danger-glow: #FF4444;
+    --negative-glow: #FF0000;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.calculator {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: var(--bg-secondary);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+}
+
+h2 {
+    color: var(--accent-color);
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+select {
+    cursor: pointer;
+}
+
+/* Output field container */
+.output-container {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+output {
+    display: block;
+    padding: 12px;
+    margin-bottom: 4px;  /* Reduced spacing between output and indicators */
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    color: var(--accent-color);
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+/* Success indicators for margins and ROI */
+output.margin-excellent {
+    border-color: var(--success-glow);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+    animation: pulse-success 2s infinite;
+}
+
+output.margin-good {
+    border-color: #88c38f;
+    box-shadow: 0 0 15px rgba(136, 195, 143, 0.3);
+    animation: pulse-good 2s infinite;
+}
+
+output.margin-moderate {
+    border-color: var(--warning-glow);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+    animation: pulse-moderate 2s infinite;
+}
+
+output.margin-negative {
+    border-color: var(--negative-glow);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+    animation: pulse-negative 2s infinite;
+}
+
+output.high-roi {
+    border-color: var(--success-glow);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+    animation: pulse-success 2s infinite;
+}
+
+/* Container for indicators */
+.indicator-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;  /* Space between indicators */
+    margin-top: 4px;
+}
+
+/* Success indicator labels */
+.success-indicator {
+    display: none;  /* Hide by default */
+    padding: 4px 8px;
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.success-indicator.show {
+    display: inline-block;  /* Show only when .show class is applied */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.indicator-excellent {
+    background-color: var(--success-glow);
+}
+
+.indicator-good {
+    background-color: #88c38f;
+}
+
+.indicator-moderate {
+    background-color: var(--warning-glow);
+}
+
+.indicator-negative {
+    background-color: var(--negative-glow);
+}
+
+.indicator-poor {
+    background-color: var(--danger-glow);
+}
+
+/* Pulse animations for different states */
+@keyframes pulse-success {
+    0% { box-shadow: 0 0 15px rgba(76, 175, 80, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(76, 175, 80, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(76, 175, 80, 0.3); }
+}
+
+@keyframes pulse-good {
+    0% { box-shadow: 0 0 15px rgba(136, 195, 143, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(136, 195, 143, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(136, 195, 143, 0.3); }
+}
+
+@keyframes pulse-moderate {
+    0% { box-shadow: 0 0 15px rgba(255, 165, 0, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(255, 165, 0, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(255, 165, 0, 0.3); }
+}
+
+@keyframes pulse-negative {
+    0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
+}
+
+@keyframes pulse-poor {
+    0% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(255, 68, 68, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.3); }
+}
+
+.auth-container button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-container button:hover {
+    background-color: #3d8b40;
+    transform: translateY(-2px);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #3d8b40;
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .calculator {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    input[type="text"], select, output {
+        padding: 10px;
+    }
+
+    .output-container {
+        margin-bottom: 16px;  /* Slightly reduced margin on mobile */
+    }
+
+    output {
+        margin-bottom: 4px;  /* Consistent spacing on mobile */
+    }
+
+    .indicator-container {
+        gap: 4px;  /* Consistent spacing between indicators */
+    }
+
+    /* Ensure indicators stay aligned on mobile */
+    .success-indicator {
+        display: none;  /* Hide by default */
+        font-size: 11px;  /* Slightly smaller text on mobile */
+        padding: 3px 6px;  /* Slightly smaller padding on mobile */
+    }
+
+    .success-indicator.show {
+        display: inline-block;  /* Keep indicators inline on mobile */
+    }
+} 

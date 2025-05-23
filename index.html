@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <title>Marketplace Winst Calculator</title>
+    <link rel="stylesheet" type="text/css" href="css/dark-theme.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="description" content="Wil je je netto winst en winstmarge per verkoop weten? Gebruik onze bol.com winst calculator, met actuele LvB en VVB kosten, om dit te berekenen!" />
+    <link rel="icon" type="image/png" href="/assets/Profit-favicon.png" />
+    <meta name='impact-site-verification' value='5c9f9ccc-d723-4c47-be00-380f6221bff7'>
+    <meta name="robots" content="noindex, nofollow">
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <button onclick="logout()">Uitloggen</button>
+    </div>
+    
+    <div class="calculator">
+        <h1>Marketplace Winst Calculator</h1>
+        <form>
+            <!-- Inkoopgegevens sectie -->
+            <h2>Inkoopgegevens</h2>
+            <label for="inkoopprijs">Inkoopprijs per stuk:</label>
+            <input type="text" id="inkoopprijs" placeholder="Inkoopprijs" /><br />
+            
+            <label for="OverigeKosten">Overige kosten per stuk:</label>
+            <input type="text" id="OverigeKosten" placeholder="Verpakking, Pick & Pack, etc." /><br />
+            
+            <label for="aantalStuks">Aantal stuks ingekocht:</label>
+            <input type="text" id="aantalStuks" placeholder="Aantal stuks" /><br />
+            
+            <label for="totaleInvestering">Totale investering:</label>
+            <div class="output-container">
+                <output id="totale-investering-output"></output>
+            </div>
+            
+            <!-- Verkoopgegevens sectie -->
+            <h2>Verkoopgegevens</h2>
+            <label for="verkoopprijs">(Gem.) Verkoopprijs per stuk (incl. BTW):</label>
+            <input type="text" id="verkoopprijs" placeholder="Verkoopprijs" /><br />
+            
+            <label for="platform">Verkoopplatform:</label>
+            <select id="platform">
+                <option value="bol">bol.com</option>
+                <option value="shopify">Shopify</option>
+                <option value="maxeda">Maxeda</option>
+            </select><br />
+            
+            <label for="btw">BTW-bedrag:</label>
+            <div class="output-container">
+                <output id="btw-output"></output>
+            </div>
+            
+            <label for="commissie">Commissie:</label>
+            <div class="output-container">
+                <output id="commissie-output"></output>
+            </div>
+
+            <div id="bol-shipping-section">
+                <label for="lvb-tarief"><a href="https://partnerplatform.bol.com/nl/hulp-nodig/logistiek-via-bol-com/tarieven-logistiek-via-bol-com/" target="_blank">LvB-formaat</a> of VVB tarief:</label>
+                <select id="lvb-tarief">
+                    <option value="3XS">3XS</option>
+                    <option value="XXS">XXS</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="VvbBrievenbuspakket">VVB Brievenbuspakket</option>
+                    <option value="VvbPakketNl">VVB Pakket NL</option>
+                    <option value="VvbPakketBe">VVB Pakket BE</option>
+                </select>
+            </div>
+
+            <div id="custom-shipping-section" style="display: none;">
+                <label for="custom-shipping">Verzendkosten per verkoop:</label>
+                <input type="text" id="custom-shipping" placeholder="Verzendkosten" /><br />
+            </div>
+
+            <div class="output-container">
+                <output id="shipping-costs-output"></output>
+            </div>
+            
+            <label for="adKostenPerSale">Verwachte ad kosten per sale:</label>
+            <input type="text" id="adKostenPerSale" placeholder="Advertentiekosten" /><br />
+            
+            <!-- Resultaten sectie -->
+            <h2>Resultaten</h2>
+            <label for="winst">Winst per verkoop:</label>
+            <div class="output-container">
+                <output id="winst-output"></output>
+            </div>
+            
+            <label for="winstmarge">Winstmarge:</label>
+            <div class="output-container">
+                <output id="winstmarge-output"></output>
+                <div class="indicator-container">
+                    <span id="margin-indicator-negative" class="success-indicator indicator-negative">Verliesgevend</span>
+                    <span id="margin-indicator-poor" class="success-indicator indicator-poor">Laag</span>
+                    <span id="margin-indicator-moderate" class="success-indicator indicator-moderate">Matig</span>
+                    <span id="margin-indicator-good" class="success-indicator indicator-good">Goed</span>
+                    <span id="margin-indicator-excellent" class="success-indicator indicator-excellent">Uitstekend!</span>
+                </div>
+            </div>
+            
+            <label for="geprognostiseerdeWinst">Geprognostiseerde winst:</label>
+            <div class="output-container">
+                <output id="geprognostiseerde-winst-output"></output>
+            </div>
+            
+            <label for="breakEvenPrijs">Break-even verkoopprijs (Incl. BTW):</label>
+            <div class="output-container">
+                <output id="break-even-prijs-output"></output>
+            </div>
+            
+            <label for="roi">ROI (Return on Investment):</label>
+            <div class="output-container">
+                <output id="roi-output"></output>
+                <div class="indicator-container">
+                    <span id="roi-indicator-poor" class="success-indicator indicator-poor">Verliesgevend</span>
+                    <span id="roi-indicator-moderate" class="success-indicator indicator-moderate">Magertjes</span>
+                    <span id="roi-indicator-decent" class="success-indicator indicator-good">Redelijk</span>
+                    <span id="roi-indicator-good" class="success-indicator indicator-good">Meer dan een verdubbeling</span>
+                    <span id="roi-indicator-excellent" class="success-indicator indicator-excellent">Uitstekend rendement!</span>
+                </div>
+            </div>
+        </form>
+        <script src="JavaScript/auth.js"></script>
+        <script src="JavaScript/script.js"></script>
+    </div>
+</body>
+</html>

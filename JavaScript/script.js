@@ -1,0 +1,272 @@
+// Calculator berekeningen
+document.addEventListener("DOMContentLoaded", function () {
+  const verkoopprijsInput = document.getElementById("verkoopprijs");
+  const inkoopprijsInput = document.getElementById("inkoopprijs");
+  const platformSelect = document.getElementById("platform");
+  const lvbTariefSelect = document.getElementById("lvb-tarief");
+  const customShippingInput = document.getElementById("custom-shipping");
+  const bolShippingSection = document.getElementById("bol-shipping-section");
+  const customShippingSection = document.getElementById("custom-shipping-section");
+  const btwOutput = document.getElementById("btw-output");
+  const commissieOutput = document.getElementById("commissie-output");
+  const overigeKostenInput = document.getElementById("OverigeKosten");
+  const aantalStuksInput = document.getElementById("aantalStuks");
+  const adKostenPerSaleInput = document.getElementById("adKostenPerSale");
+  const winstOutput = document.getElementById("winst-output");
+  const geprognostiseerdeWinstOutput = document.getElementById("geprognostiseerde-winst-output");
+  const winstmargeOutput = document.getElementById("winstmarge-output");
+  const roiOutput = document.getElementById("roi-output");
+  const totaleInvesteringOutput = document.getElementById("totale-investering-output");
+  const breakEvenPrijsOutput = document.getElementById("break-even-prijs-output");
+  const shippingCostsOutput = document.getElementById("shipping-costs-output");
+
+  // Margin indicators
+  const marginIndicatorNegative = document.getElementById("margin-indicator-negative");
+  const marginIndicatorPoor = document.getElementById("margin-indicator-poor");
+  const marginIndicatorModerate = document.getElementById("margin-indicator-moderate");
+  const marginIndicatorGood = document.getElementById("margin-indicator-good");
+  const marginIndicatorExcellent = document.getElementById("margin-indicator-excellent");
+
+  // ROI indicators
+  const roiIndicatorPoor = document.getElementById("roi-indicator-poor");
+  const roiIndicatorModerate = document.getElementById("roi-indicator-moderate");
+  const roiIndicatorDecent = document.getElementById("roi-indicator-decent");
+  const roiIndicatorGood = document.getElementById("roi-indicator-good");
+  const roiIndicatorExcellent = document.getElementById("roi-indicator-excellent");
+
+  // Platform configurations
+  const platformConfigs = {
+    bol: {
+      name: "bol.com",
+      commission: (price) => {
+        if (price <= 10) return price * 0.124 + 0.2;
+        if (price <= 20) return price * 0.124 + 0.4;
+        return price * 0.124 + 0.85;
+      },
+      shipping: (price, format) => {
+        const tarieven = {
+          "3XS": price < 16 ? 2.44 : 2.64,
+          XXS: price < 16 ? 3.17 : 3.37,
+          XS: price < 16 ? 4.12 : 4.87,
+          S: price < 16 ? 5.05 : 5.8,
+          M: price < 16 ? 5.22 : 5.97,
+          L: price < 16 ? 6.41 : 7.06,
+          VvbBrievenbuspakket: price < 16 ? 4.35 : 4.35,
+          VvbPakketNl: price < 16 ? 5.88 : 5.88,
+          VvbPakketBe: price < 16 ? 5.70 : 5.70,
+        };
+        return tarieven[format] || 0;
+      }
+    },
+    amazon: {
+      name: "Amazon",
+      commission: (price) => price * 0.15, // 15% commission
+      shipping: () => 0 // Amazon handles shipping
+    },
+    marktplaats: {
+      name: "Marktplaats",
+      commission: (price) => price * 0.05, // 5% commission
+      shipping: () => 0 // Seller handles shipping
+    },
+    etsy: {
+      name: "Etsy",
+      commission: (price) => price * 0.05 + 0.25, // 5% + €0.25 per listing
+      shipping: () => 0 // Seller handles shipping
+    },
+    custom: {
+      name: "Aangepast",
+      commission: (price) => price * 0.10, // Default 10% commission
+      shipping: () => parseInputValue(customShippingInput.value)
+    }
+  };
+
+  function parseInputValue(inputValue) {
+    if (!inputValue || inputValue.trim() === '') {
+      return 0;
+    }
+    const cleanValue = inputValue.replace(",", ".");
+    const parsed = parseFloat(cleanValue);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+
+  function berekenBTWBedrag(verkoopprijs) {
+    return (verkoopprijs / 121) * 21;
+  }
+
+  function berekenCommissie(verkoopprijs) {
+    const platform = platformSelect.value;
+    return platformConfigs[platform].commission(verkoopprijs);
+  }
+
+  function berekenVerzendkosten(verkoopprijs) {
+    const platform = platformSelect.value;
+    if (platform === 'bol') {
+      return platformConfigs[platform].shipping(verkoopprijs, lvbTariefSelect.value);
+    }
+    return platformConfigs[platform].shipping(verkoopprijs);
+  }
+
+  function berekenBreakEvenPrijs(inkoopprijs, overigeKosten, adKostenPerSale) {
+    let breakEvenPrijs = inkoopprijs * 2;
+    let previousBreakEvenPrijs;
+    
+    do {
+      previousBreakEvenPrijs = breakEvenPrijs;
+      
+      const btwBedrag = berekenBTWBedrag(breakEvenPrijs);
+      const commissie = berekenCommissie(breakEvenPrijs);
+      const verzendkosten = berekenVerzendkosten(breakEvenPrijs);
+      
+      const totaleKosten = btwBedrag + commissie + verzendkosten + inkoopprijs + overigeKosten + adKostenPerSale;
+      
+      if (totaleKosten > breakEvenPrijs) {
+        breakEvenPrijs = totaleKosten;
+      } else {
+        breakEvenPrijs = totaleKosten;
+      }
+      
+    } while (Math.abs(breakEvenPrijs - previousBreakEvenPrijs) > 0.01);
+    
+    return breakEvenPrijs;
+  }
+
+  function updateMarginIndicators(winstmarge) {
+    // Reset all classes and indicators
+    winstmargeOutput.classList.remove('margin-negative', 'margin-poor', 'margin-moderate', 'margin-good', 'margin-excellent');
+    marginIndicatorNegative.classList.remove('show');
+    marginIndicatorPoor.classList.remove('show');
+    marginIndicatorModerate.classList.remove('show');
+    marginIndicatorGood.classList.remove('show');
+    marginIndicatorExcellent.classList.remove('show');
+
+    // Apply appropriate indicator
+    if (winstmarge < 0) {
+      winstmargeOutput.classList.add('margin-negative');
+      marginIndicatorNegative.classList.add('show');
+    } else if (winstmarge < 10) {
+      winstmargeOutput.classList.add('margin-poor');
+      marginIndicatorPoor.classList.add('show');
+    } else if (winstmarge < 20) {
+      winstmargeOutput.classList.add('margin-moderate');
+      marginIndicatorModerate.classList.add('show');
+    } else if (winstmarge < 30) {
+      winstmargeOutput.classList.add('margin-good');
+      marginIndicatorGood.classList.add('show');
+    } else {
+      winstmargeOutput.classList.add('margin-excellent');
+      marginIndicatorExcellent.classList.add('show');
+    }
+  }
+
+  function updateRoiIndicators(roi) {
+    // Reset all classes and indicators
+    roiOutput.classList.remove('margin-poor', 'margin-moderate', 'margin-good', 'margin-excellent');
+    roiIndicatorPoor.classList.remove('show');
+    roiIndicatorModerate.classList.remove('show');
+    roiIndicatorDecent.classList.remove('show');
+    roiIndicatorGood.classList.remove('show');
+    roiIndicatorExcellent.classList.remove('show');
+
+    // Apply appropriate indicator
+    if (roi < 0) {
+      roiOutput.classList.add('margin-poor');
+      roiIndicatorPoor.classList.add('show');
+    } else if (roi < 50) {
+      roiOutput.classList.add('margin-moderate');
+      roiIndicatorModerate.classList.add('show');
+    } else if (roi < 100) {
+      roiOutput.classList.add('margin-good');
+      roiIndicatorDecent.classList.add('show');
+    } else if (roi < 200) {
+      roiOutput.classList.add('margin-good');
+      roiIndicatorGood.classList.add('show');
+    } else {
+      roiOutput.classList.add('margin-excellent');
+      roiIndicatorExcellent.classList.add('show');
+    }
+  }
+
+  function updateShippingUI() {
+    const platform = platformSelect.value;
+    if (platform === 'bol') {
+      bolShippingSection.style.display = 'block';
+      customShippingSection.style.display = 'none';
+    } else if (platform === 'custom') {
+      bolShippingSection.style.display = 'none';
+      customShippingSection.style.display = 'block';
+    } else {
+      bolShippingSection.style.display = 'none';
+      customShippingSection.style.display = 'none';
+    }
+  }
+
+  function updateUI() {
+    const verkoopprijs = parseInputValue(verkoopprijsInput.value);
+    const inkoopprijs = parseInputValue(inkoopprijsInput.value);
+    const overigeKosten = parseInputValue(overigeKostenInput.value);
+    const aantalStuks = parseInputValue(aantalStuksInput.value);
+    const adKostenPerSale = parseInputValue(adKostenPerSaleInput.value);
+
+    const btwBedrag = berekenBTWBedrag(verkoopprijs);
+    const commissie = berekenCommissie(verkoopprijs);
+    const verzendkosten = berekenVerzendkosten(verkoopprijs);
+    
+    const winstPerVerkoop = verkoopprijs - btwBedrag - commissie - verzendkosten - inkoopprijs - overigeKosten - adKostenPerSale;
+    const geprognostiseerdeWinst = winstPerVerkoop * aantalStuks;
+    
+    const verkoopprijsExclBTW = verkoopprijs - btwBedrag;
+    const winstmarge = verkoopprijsExclBTW > 0 ? (winstPerVerkoop / verkoopprijsExclBTW) * 100 : 0;
+    
+    const totaleInvestering = (inkoopprijs + overigeKosten) * aantalStuks;
+    const investmentPerItem = inkoopprijs + overigeKosten;
+    const roi = investmentPerItem > 0 ? (winstPerVerkoop / investmentPerItem) * 100 : 0;
+
+    updateMarginIndicators(winstmarge);
+    updateRoiIndicators(roi);
+
+    const breakEvenPrijsInclBTW = berekenBreakEvenPrijs(
+      inkoopprijs,
+      overigeKosten,
+      adKostenPerSale
+    );
+
+    btwOutput.textContent = `€${btwBedrag.toFixed(2)}`;
+    commissieOutput.textContent = `€${commissie.toFixed(2)}`;
+    totaleInvesteringOutput.textContent = `€${totaleInvestering.toFixed(2)}`;
+    breakEvenPrijsOutput.textContent = `€${breakEvenPrijsInclBTW.toFixed(2)}`;
+    shippingCostsOutput.textContent = `€${verzendkosten.toFixed(2)}`;
+    winstOutput.textContent = `€${winstPerVerkoop.toFixed(2)}`;
+    geprognostiseerdeWinstOutput.textContent = `€${geprognostiseerdeWinst.toFixed(2)}`;
+    winstmargeOutput.textContent = `${winstmarge.toFixed(2)}%`;
+    roiOutput.textContent = `${roi.toFixed(2)}%`;
+  }
+
+  // Add event listeners
+  platformSelect.addEventListener("change", () => {
+    updateShippingUI();
+    updateUI();
+  });
+  customShippingInput.addEventListener("input", updateUI);
+  verkoopprijsInput.addEventListener("input", updateUI);
+  inkoopprijsInput.addEventListener("input", updateUI);
+  lvbTariefSelect.addEventListener("change", updateUI);
+  overigeKostenInput.addEventListener("input", updateUI);
+  aantalStuksInput.addEventListener("input", updateUI);
+  adKostenPerSaleInput.addEventListener("input", updateUI);
+
+  // Initialize UI
+  updateShippingUI();
+  updateUI();
+});
+
+// nav bar start
+const mobileNav = document.querySelector(".hamburger");
+const navbar = document.querySelector(".menubar");
+
+const toggleNav = () => {
+  navbar.classList.toggle("active");
+  mobileNav.classList.toggle("hamburger-active");
+};
+mobileNav.addEventListener("click", () => toggleNav());
+
+// nav bar end
