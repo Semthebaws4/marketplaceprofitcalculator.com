@@ -5,9 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const platformSelect = document.getElementById("platform");
   const lvbTariefSelect = document.getElementById("lvb-tarief");
   const shopifyPaymentSelect = document.getElementById("shopify-payment");
+  const shippingMethodSelect = document.getElementById("shipping-method");
   const customShippingInput = document.getElementById("custom-shipping");
   const bolShippingSection = document.getElementById("bol-shipping-section");
   const shopifyPaymentSection = document.getElementById("shopify-payment-section");
+  const shippingMethodSection = document.getElementById("shipping-method-section");
   const customShippingSection = document.getElementById("custom-shipping-section");
   const btwOutput = document.getElementById("btw-output");
   const commissieOutput = document.getElementById("commissie-output");
@@ -76,12 +78,24 @@ document.addEventListener("DOMContentLoaded", function () {
             return 0;
         }
       },
-      shipping: () => 0 // Seller handles shipping
+      shipping: (price, method) => {
+        const tarieven = {
+          'pakket-nl': 5.10,
+          'pakket-be': 5.70
+        };
+        return tarieven[method] || 0;
+      }
     },
     maxeda: {
       name: "Maxeda",
       commission: (price) => price * 0.135, // 13.5% commission
-      shipping: () => 0 // Seller handles shipping
+      shipping: (price, method) => {
+        const tarieven = {
+          'pakket-nl': 5.10,
+          'pakket-be': 5.70
+        };
+        return tarieven[method] || 0;
+      }
     },
     amazon: {
       name: "Amazon",
@@ -134,8 +148,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const platform = platformSelect.value;
     if (platform === 'bol') {
       return platformConfigs[platform].shipping(verkoopprijs, lvbTariefSelect.value);
+    } else if (platform === 'shopify' || platform === 'maxeda') {
+      return platformConfigs[platform].shipping(verkoopprijs, shippingMethodSelect.value);
     }
-    return 0; // No shipping costs for other platforms
+    return 0;
   }
 
   function berekenBreakEvenPrijs(inkoopprijs, overigeKosten, adKostenPerSale) {
@@ -223,18 +239,27 @@ document.addEventListener("DOMContentLoaded", function () {
     if (platform === 'bol') {
       bolShippingSection.style.display = 'block';
       shopifyPaymentSection.style.display = 'none';
+      shippingMethodSection.style.display = 'none';
       customShippingSection.style.display = 'none';
     } else if (platform === 'shopify') {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'block';
+      shippingMethodSection.style.display = 'block';
+      customShippingSection.style.display = 'none';
+    } else if (platform === 'maxeda') {
+      bolShippingSection.style.display = 'none';
+      shopifyPaymentSection.style.display = 'none';
+      shippingMethodSection.style.display = 'block';
       customShippingSection.style.display = 'none';
     } else if (platform === 'custom') {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'none';
+      shippingMethodSection.style.display = 'none';
       customShippingSection.style.display = 'block';
     } else {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'none';
+      shippingMethodSection.style.display = 'none';
       customShippingSection.style.display = 'none';
     }
   }
@@ -286,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateUI();
   });
   shopifyPaymentSelect.addEventListener("change", updateUI);
+  shippingMethodSelect.addEventListener("change", updateUI);
   customShippingInput.addEventListener("input", updateUI);
   verkoopprijsInput.addEventListener("input", updateUI);
   inkoopprijsInput.addEventListener("input", updateUI);

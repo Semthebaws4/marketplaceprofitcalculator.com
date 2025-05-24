@@ -87,6 +87,14 @@
                 <input type="text" id="custom-shipping" placeholder="Verzendkosten" /><br />
             </div>
 
+            <div id="shipping-method-section" style="display: none;">
+                <label for="shipping-method">Verzendmethode:</label>
+                <select id="shipping-method">
+                    <option value="pakket-nl">Pakket NL (€5,10)</option>
+                    <option value="pakket-be">Pakket BE (€5,70)</option>
+                </select>
+            </div>
+
             <div class="output-container">
                 <output id="shipping-costs-output"></output>
             </div>
