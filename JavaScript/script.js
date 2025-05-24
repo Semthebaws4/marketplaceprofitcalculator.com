@@ -6,11 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const lvbTariefSelect = document.getElementById("lvb-tarief");
   const shopifyPaymentSelect = document.getElementById("shopify-payment");
   const shippingMethodSelect = document.getElementById("shipping-method");
-  const customShippingInput = document.getElementById("custom-shipping");
   const bolShippingSection = document.getElementById("bol-shipping-section");
   const shopifyPaymentSection = document.getElementById("shopify-payment-section");
   const shippingMethodSection = document.getElementById("shipping-method-section");
-  const customShippingSection = document.getElementById("custom-shipping-section");
   const btwOutput = document.getElementById("btw-output");
   const commissieOutput = document.getElementById("commissie-output");
   const overigeKostenInput = document.getElementById("OverigeKosten");
@@ -96,26 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         return tarieven[method] || 0;
       }
-    },
-    amazon: {
-      name: "Amazon",
-      commission: (price) => price * 0.15, // 15% commission
-      shipping: () => 0 // Amazon handles shipping
-    },
-    marktplaats: {
-      name: "Marktplaats",
-      commission: (price) => price * 0.05, // 5% commission
-      shipping: () => 0 // Seller handles shipping
-    },
-    etsy: {
-      name: "Etsy",
-      commission: (price) => price * 0.05 + 0.25, // 5% + €0.25 per listing
-      shipping: () => 0 // Seller handles shipping
-    },
-    custom: {
-      name: "Aangepast",
-      commission: (price) => price * 0.10, // Default 10% commission
-      shipping: () => parseInputValue(customShippingInput.value)
     }
   };
 
@@ -240,27 +218,18 @@ document.addEventListener("DOMContentLoaded", function () {
       bolShippingSection.style.display = 'block';
       shopifyPaymentSection.style.display = 'none';
       shippingMethodSection.style.display = 'none';
-      customShippingSection.style.display = 'none';
     } else if (platform === 'shopify') {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'block';
       shippingMethodSection.style.display = 'block';
-      customShippingSection.style.display = 'none';
     } else if (platform === 'maxeda') {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'none';
       shippingMethodSection.style.display = 'block';
-      customShippingSection.style.display = 'none';
-    } else if (platform === 'custom') {
-      bolShippingSection.style.display = 'none';
-      shopifyPaymentSection.style.display = 'none';
-      shippingMethodSection.style.display = 'none';
-      customShippingSection.style.display = 'block';
     } else {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'none';
       shippingMethodSection.style.display = 'none';
-      customShippingSection.style.display = 'none';
     }
   }
 
@@ -312,7 +281,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   shopifyPaymentSelect.addEventListener("change", updateUI);
   shippingMethodSelect.addEventListener("change", updateUI);
-  customShippingInput.addEventListener("input", updateUI);
   verkoopprijsInput.addEventListener("input", updateUI);
   inkoopprijsInput.addEventListener("input", updateUI);
   lvbTariefSelect.addEventListener("change", updateUI);
