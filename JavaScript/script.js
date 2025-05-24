@@ -58,6 +58,16 @@ document.addEventListener("DOMContentLoaded", function () {
         return tarieven[format] || 0;
       }
     },
+    shopify: {
+      name: "Shopify",
+      commission: () => 0, // No marketplace commission
+      shipping: () => 0 // Seller handles shipping
+    },
+    maxeda: {
+      name: "Maxeda",
+      commission: () => 0, // No marketplace commission
+      shipping: () => 0 // Seller handles shipping
+    },
     amazon: {
       name: "Amazon",
       commission: (price) => price * 0.15, // 15% commission
@@ -95,7 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function berekenCommissie(verkoopprijs) {
     const platform = platformSelect.value;
-    return platformConfigs[platform].commission(verkoopprijs);
+    if (platform === 'bol') {
+      return platformConfigs[platform].commission(verkoopprijs);
+    }
+    return 0; // No commission for other platforms
   }
 
   function berekenVerzendkosten(verkoopprijs) {
@@ -103,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (platform === 'bol') {
       return platformConfigs[platform].shipping(verkoopprijs, lvbTariefSelect.value);
     }
-    return platformConfigs[platform].shipping(verkoopprijs);
+    return 0; // No shipping costs for other platforms
   }
 
   function berekenBreakEvenPrijs(inkoopprijs, overigeKosten, adKostenPerSale) {
