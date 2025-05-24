@@ -46,16 +46,6 @@
                 <option value="shopify">Shopify</option>
                 <option value="maxeda">Maxeda</option>
             </select>
-            
-            <label for="btw">BTW-bedrag:</label>
-            <div class="output-container">
-                <output id="btw-output"></output>
-            </div>
-            
-            <label for="commissie">Commissie:</label>
-            <div class="output-container">
-                <output id="commissie-output"></output>
-            </div>
 
             <div id="bol-shipping-section">
                 <label for="lvb-tarief"><a href="https://partnerplatform.bol.com/nl/hulp-nodig/logistiek-via-bol-com/tarieven-logistiek-via-bol-com/" target="_blank">LvB-formaat</a> of VVB tarief:</label>
@@ -89,13 +79,24 @@
                     <option value="pakket-be">Pakket BE (€5,70)</option>
                 </select>
             </div>
+            
+            <label for="adKostenPerSale">Verwachte ad kosten per sale:</label>
+            <input type="text" id="adKostenPerSale" placeholder="Advertentiekosten" />
+
+            <!-- Outputs -->
+            <label for="btw">BTW-bedrag:</label>
+            <div class="output-container">
+                <output id="btw-output"></output>
+            </div>
+            
+            <label for="commissie">Commissie:</label>
+            <div class="output-container">
+                <output id="commissie-output"></output>
+            </div>
 
             <div class="output-container">
                 <output id="shipping-costs-output"></output>
             </div>
-            
-            <label for="adKostenPerSale">Verwachte ad kosten per sale:</label>
-            <input type="text" id="adKostenPerSale" placeholder="Advertentiekosten" />
             
             <!-- Resultaten sectie -->
             <h2>Resultaten</h2>
