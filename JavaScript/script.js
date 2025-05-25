@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const bolShippingSection = document.getElementById("bol-shipping-section");
   const shopifyPaymentSection = document.getElementById("shopify-payment-section");
   const shippingMethodSection = document.getElementById("shipping-method-section");
+  const amazonFeesSection = document.getElementById("amazon-fees-section");
+  const amazonFeesInput = document.getElementById("amazon-fees");
   const btwOutput = document.getElementById("btw-output");
   const commissieOutput = document.getElementById("commissie-output");
   const overigeKostenInput = document.getElementById("OverigeKosten");
@@ -118,6 +120,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return platformConfigs[platform].commission(verkoopprijs, shopifyPaymentSelect.value);
     } else if (platform === 'maxeda') {
       return platformConfigs[platform].commission(verkoopprijs);
+    } else if (platform === 'amazon') {
+      return parseInputValue(amazonFeesInput.value);
     }
     return 0;
   }
@@ -218,18 +222,27 @@ document.addEventListener("DOMContentLoaded", function () {
       bolShippingSection.style.display = 'block';
       shopifyPaymentSection.style.display = 'none';
       shippingMethodSection.style.display = 'none';
+      amazonFeesSection.style.display = 'none';
     } else if (platform === 'shopify') {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'block';
       shippingMethodSection.style.display = 'block';
+      amazonFeesSection.style.display = 'none';
     } else if (platform === 'maxeda') {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'none';
       shippingMethodSection.style.display = 'block';
+      amazonFeesSection.style.display = 'none';
+    } else if (platform === 'amazon') {
+      bolShippingSection.style.display = 'none';
+      shopifyPaymentSection.style.display = 'none';
+      shippingMethodSection.style.display = 'block';
+      amazonFeesSection.style.display = 'block';
     } else {
       bolShippingSection.style.display = 'none';
       shopifyPaymentSection.style.display = 'none';
       shippingMethodSection.style.display = 'none';
+      amazonFeesSection.style.display = 'none';
     }
   }
 
@@ -287,6 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
   overigeKostenInput.addEventListener("input", updateUI);
   aantalStuksInput.addEventListener("input", updateUI);
   adKostenPerSaleInput.addEventListener("input", updateUI);
+  amazonFeesInput.addEventListener("input", updateUI);
 
   // Initialize UI
   updateShippingUI();
