@@ -96,6 +96,17 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         return tarieven[method] || 0;
       }
+    },
+    amazon: {
+      name: "Amazon",
+      commission: (price) => parseInputValue(amazonFeesInput.value),
+      shipping: (price, method) => {
+        const tarieven = {
+          'pakket-nl': 5.10,
+          'pakket-be': 5.70
+        };
+        return tarieven[method] || 0;
+      }
     }
   };
 
@@ -130,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const platform = platformSelect.value;
     if (platform === 'bol') {
       return platformConfigs[platform].shipping(verkoopprijs, lvbTariefSelect.value);
-    } else if (platform === 'shopify' || platform === 'maxeda') {
+    } else if (platform === 'shopify' || platform === 'maxeda' || platform === 'amazon') {
       return platformConfigs[platform].shipping(verkoopprijs, shippingMethodSelect.value);
     }
     return 0;
