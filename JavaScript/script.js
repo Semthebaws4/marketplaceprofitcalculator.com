@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const roiOutput = document.getElementById("roi-output");
   const totaleInvesteringOutput = document.getElementById("totale-investering-output");
   const breakEvenPrijsOutput = document.getElementById("break-even-prijs-output");
+  const breakEvenQuantityOutput = document.getElementById("break-even-quantity-output");
   const shippingCostsOutput = document.getElementById("shipping-costs-output");
 
   // Margin indicators
@@ -287,10 +288,14 @@ document.addEventListener("DOMContentLoaded", function () {
       adKostenPerSale
     );
 
+    // Calculate break-even quantity
+    const breakEvenQuantity = winstPerVerkoop > 0 ? Math.ceil(totaleInvestering / winstPerVerkoop) : 0;
+
     btwOutput.textContent = `€${btwBedrag.toFixed(2)}`;
     commissieOutput.textContent = `€${commissie.toFixed(2)}`;
     totaleInvesteringOutput.textContent = `€${totaleInvestering.toFixed(2)}`;
     breakEvenPrijsOutput.textContent = `€${breakEvenPrijsInclBTW.toFixed(2)}`;
+    breakEvenQuantityOutput.textContent = winstPerVerkoop > 0 ? `${breakEvenQuantity} stuks` : 'Onbepaald';
     shippingCostsOutput.textContent = `€${verzendkosten.toFixed(2)}`;
     winstOutput.textContent = `€${winstPerVerkoop.toFixed(2)}`;
     geprognostiseerdeWinstOutput.textContent = `€${geprognostiseerdeWinst.toFixed(2)}`;
