@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       shipping: (price, method) => {
         const tarieven = {
+          'brievenbuspakje-nl': 3.10,
           'pakket-nl': 5.10,
           'pakket-be': 5.70
         };
@@ -92,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
       commission: (price) => price * 0.135, // 13.5% commission
       shipping: (price, method) => {
         const tarieven = {
+          'brievenbuspakje-nl': 3.10,
           'pakket-nl': 5.10,
           'pakket-be': 5.70
         };
@@ -103,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
       commission: (price) => parseInputValue(amazonFeesInput.value),
       shipping: (price, method) => {
         const tarieven = {
+          'brievenbuspakje-nl': 3.10,
           'pakket-nl': 5.10,
           'pakket-be': 5.70
         };
