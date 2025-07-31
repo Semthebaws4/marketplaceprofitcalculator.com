@@ -188,13 +188,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (winstmarge < 0) {
       winstmargeOutput.classList.add('margin-negative');
       marginIndicatorNegative.classList.add('show');
-    } else if (winstmarge < 10) {
+    } else if (winstmarge < 20) {
       winstmargeOutput.classList.add('margin-poor');
       marginIndicatorPoor.classList.add('show');
-    } else if (winstmarge < 20) {
+    } else if (winstmarge < 30) {
       winstmargeOutput.classList.add('margin-moderate');
       marginIndicatorModerate.classList.add('show');
-    } else if (winstmarge < 30) {
+    } else if (winstmarge < 40) {
       winstmargeOutput.classList.add('margin-good');
       marginIndicatorGood.classList.add('show');
     } else {
